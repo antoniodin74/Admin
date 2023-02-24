@@ -8,11 +8,6 @@ var axios = require("axios");
 //As400
 async function getAs(pars){
 	console.log('PARS: ' + pars);
-
-	greetUsers(pars);
-
-	const cn1 = "DSN=nodejs;UID=dinoceraa;PWD=antodino";
-	const connection = await odbc.connect(cn1);
 	
 	var num = Number(pars.start);	
 		
@@ -43,41 +38,69 @@ async function getAs(pars){
 		var dtini = giraData(dtday1);
 	 	} 
 
-	var whereData = ' LABDT0 >= ? AND LABDT0 <=? '
-	var where = ' WHERE ' +   whereData;
+	var whereCampi = await DecWhere(pars);
+	if(whereCampi === undefined){
+		whereCampi = ' LAARE0 = ? AND LABDT0 >= ? AND LABDT0 <=? '
+	}
+	var where = ' WHERE ' +   whereCampi;
 	
+	var anno = 2023;
+	var paramanno = anno;
 	var paramDtini = dtini;
 	var paramDtfin = dtfin;
 	var param =[
+		paramanno,
 		paramDtini,
 		paramDtfin
 	];
 
 	console.log('WHERE: ' + where);
 	console.log('PARAM: ' + param);
+
+	const cn1 = "DSN=nodejs;UID=dinoceraa;PWD=antodino";
+	const connection = await odbc.connect(cn1);
 	const data = await connection.query('SELECT LAARE0, LANRE0, LADER0, LATBO0,LABNR0,LABDT0,LABTI0,LASTR0,COUNT(*) as TCNT  FROM L0__STDAT.LABOLF0' + where + 'GROUP BY LAARE0, LANRE0, LADER0, LATBO0, LATBO0,LABNR0,LABDT0,LABTI0,LASTR0 ORDER BY LANRE0' , param);
 	return data;
 }
 
-function greetUsers(pars) {
+async function DecWhere(pars) {
 	for (var prop in pars) {
 		var campi;
-		console.log(prop + ": " + pars[prop]);
-		if(campi===undefined){
-			if(prop === 'start' || prop === 'end') {
-				prop = 'LABDT0';
+		//console.log(prop + ": " + pars[prop]);
+
+		if(pars[prop]!==undefined && +pars[prop]!==0 && pars[prop]!==""){
+			if(campi===undefined){
+				if(prop === 'start') {
+					prop = 'LABDT0';
+					campi = prop + ' >= ? ';
+				}
+				 else if(prop === 'end') {
+					prop = 'LABDT0';
+					campi = prop + ' <= ? ';
+				}
+				else {
+					campi = prop + '= ? ';
+				}
+				//campi = prop + '= ? '; 
+				//console.log("WHERE "+campi);
+			}else{
+				if(prop === 'start') {
+					prop = 'LABDT0';
+					campi += 'AND ' + prop + ' >= ? '; 
+				}
+				else if(prop === 'end') {
+					prop = 'LABDT0';
+					campi += 'AND ' + prop + ' <= ? '; 
+				}
+				else {
+					campi += 'AND ' + prop + '= ? '; 
+				}
+				//campi += 'AND ' + prop + '= ? '; 
+				//console.log("WHERE "+campi);
 			}
-			campi = prop + '= ? '; 
-			console.log(campi);
-		}else{
-			if(prop === 'start' || prop === 'end') {
-				prop = 'LABDT0';
-			}
-			campi += 'AND ' + prop + '= ? '; 
-			console.log(campi);
-		}
-		
+		};
 	  }
+	  return campi;
   }
 
 function giraData (data) {
