@@ -6,53 +6,26 @@ var validator = require('express-validator');
 var axios = require("axios");
 
 //As400
-async function getAs(pars){
-	console.log('PARS: ' + pars);
-	
-	var num = Number(pars.start);	
-		
-		if(pars.start!==undefined){
-			if(num !== 0){
-				var dtini=(pars.start);
-				var aa = dtini.substring(6, 10);
-				var mm = dtini.substring(3, 5);
-				var gg = dtini.substring(0, 2);
-				var dtini = aa + '-' + mm + '-' + gg;
-				var dtfin=(pars.end);
-				var aa = dtfin.substring(6, 10);
-				var mm = dtfin.substring(3, 5);
-				var gg = dtfin.substring(0, 2);
-				var dtfin = aa + '-' + mm + '-' + gg;
-		} else {
-		const dtday = new Date();
-		const dtday1 = new Date();
-		dtday1.setDate(dtday.getDate() - 1);
-		var dtfin = giraData(dtday);
-		var dtini = giraData(dtday1);
-	 	} 
-	} else {
-		const dtday = new Date();
-		const dtday1 = new Date();
-		dtday1.setDate(dtday.getDate() - 1);
-		var dtfin = giraData(dtday);
-		var dtini = giraData(dtday1);
-	 	} 
+async function getAs(pars){		
+	const dtini = await SetRangeData(pars.start);
+	const dtfin = await SetRangeData(pars.end);
+	let result = await DecWhere(pars);
+	var whereCampi = result[0];
+	var parametri = result[1];
 
-	var whereCampi = await DecWhere(pars);
 	if(whereCampi === undefined){
-		whereCampi = ' LAARE0 = ? AND LABDT0 >= ? AND LABDT0 <=? '
+		where = ' WHERE LABDT0 >= ? AND LABDT0 <=? '
+		var paramDtini = dtini;
+		var paramDtfin = dtfin;
+		param = [
+			dtini,
+			dtfin
+		];
+	} else {
+		var where = ' WHERE ' +   whereCampi;
+		var param =[parametri];
 	}
-	var where = ' WHERE ' +   whereCampi;
 	
-	var anno = 2023;
-	var paramanno = anno;
-	var paramDtini = dtini;
-	var paramDtfin = dtfin;
-	var param =[
-		paramanno,
-		paramDtini,
-		paramDtfin
-	];
 
 	console.log('WHERE: ' + where);
 	console.log('PARAM: ' + param);
@@ -63,44 +36,83 @@ async function getAs(pars){
 	return data;
 }
 
+async function SetRangeData(data) {
+	var num = Number(data);
+	if(data!==undefined){
+		if(num !== 0){
+			var dtset=(data);
+			var aa = dtset.substring(6, 10);
+			var mm = dtset.substring(3, 5);
+			var gg = dtset.substring(0, 2);
+			var dtset = aa + '-' + mm + '-' + gg;
+	} else {
+			const dtday = new Date();
+			//const dtday1 = new Date();
+			//dtday1.setDate(dtday.getDate() - 1);
+			var dtset = giraData(dtday);
+			//var dtini = giraData(dtday1);
+	} 
+	} else {
+		const dtday = new Date();
+		var dtset = giraData(dtday);
+		//const dtday1 = new Date();
+		//dtday1.setDate(dtday.getDate() - 1);
+		//var dtini = giraData(dtday1);
+		} 
+	return dtset;
+}
+
 async function DecWhere(pars) {
 	for (var prop in pars) {
 		var campi;
-		//console.log(prop + ": " + pars[prop]);
+		var dati;
+		var dati1;
 
 		if(pars[prop]!==undefined && +pars[prop]!==0 && pars[prop]!==""){
-			if(campi===undefined){
+			if(campi===undefined){		
 				if(prop === 'start') {
+					dati = giraData1(pars[prop]);
 					prop = 'LABDT0';
 					campi = prop + ' >= ? ';
 				}
 				 else if(prop === 'end') {
+					dati = giraData1(pars[prop]);
 					prop = 'LABDT0';
 					campi = prop + ' <= ? ';
 				}
 				else {
+					dati = pars[prop];
 					campi = prop + '= ? ';
 				}
 				//campi = prop + '= ? '; 
 				//console.log("WHERE "+campi);
+				//console.log("DATI: " + dati);
 			}else{
+				
+				
 				if(prop === 'start') {
+					dati1 = giraData1(pars[prop]);
+					dati += ',' + dati1;
 					prop = 'LABDT0';
 					campi += 'AND ' + prop + ' >= ? '; 
 				}
 				else if(prop === 'end') {
+					dati1 = giraData1(pars[prop]);
+					dati += ',' + dati1;
 					prop = 'LABDT0';
 					campi += 'AND ' + prop + ' <= ? '; 
 				}
 				else {
+					dati += ',' + pars[prop];
 					campi += 'AND ' + prop + '= ? '; 
 				}
 				//campi += 'AND ' + prop + '= ? '; 
 				//console.log("WHERE "+campi);
+				//console.log("DATI: " + dati);
 			}
 		};
 	  }
-	  return campi;
+	  return [campi,dati];
   }
 
 function giraData (data) {
@@ -123,6 +135,13 @@ function giraData (data) {
 	return dtgira;
 }
 
+function giraData1 (data) {
+	var aa = data.substring(6, 10);
+	var mm = data.substring(3, 5);
+	var gg = data.substring(0, 2);
+	var data = aa + '-' + mm + '-' + gg;
+	return data;
+}
 module.exports =  {
 	getAs
 };
