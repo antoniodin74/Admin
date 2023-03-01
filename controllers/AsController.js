@@ -2,37 +2,27 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var urlencodeParser = bodyParser.urlencoded({ extended: false });
 const odbc = require('odbc');
-var validator = require('express-validator');
-var axios = require("axios");
+//var validator = require('express-validator');
+//var axios = require("axios");
 
 //As400
 async function getAs(pars){		
 	const dtini = await SetRangeData(pars.start);
 	const dtfin = await SetRangeData(pars.end);
-	let result = await DecWhere(pars);
-	var whereCampi = result[0];
-	var parametri = result[1];
-
-	if(whereCampi === undefined){
-		where = ' WHERE LABDT0 >= ? AND LABDT0 <=? '
-		var paramDtini = dtini;
-		var paramDtfin = dtfin;
+	var where = await DecWhere(pars);
+	var param = await DecWhere1(pars);
+	
+	if(where === undefined){
+		where = ' LABDT0 >= ? AND LABDT0 <= ? '
 		param = [
 			dtini,
 			dtfin
 		];
-	} else {
-		var where = ' WHERE ' +   whereCampi;
-		var param =[parametri];
-	}
-	
-
-	console.log('WHERE: ' + where);
-	console.log('PARAM: ' + param);
+	} 
 
 	const cn1 = "DSN=nodejs;UID=dinoceraa;PWD=antodino";
 	const connection = await odbc.connect(cn1);
-	const data = await connection.query('SELECT LAARE0, LANRE0, LADER0, LATBO0,LABNR0,LABDT0,LABTI0,LASTR0,COUNT(*) as TCNT  FROM L0__STDAT.LABOLF0' + where + 'GROUP BY LAARE0, LANRE0, LADER0, LATBO0, LATBO0,LABNR0,LABDT0,LABTI0,LASTR0 ORDER BY LANRE0' , param);
+	const data = await connection.query('SELECT LAARE0, LANRE0, LADER0, LATBO0,LABNR0,LABDT0,LABTI0,LASTR0,COUNT(*) as TCNT  FROM L0__STDAT.LABOLF0 WHERE ' + where + ' GROUP BY LAARE0, LANRE0, LADER0, LATBO0, LATBO0,LABNR0,LABDT0,LABTI0,LASTR0 ORDER BY LANRE0' , param);
 	return data;
 }
 
@@ -65,54 +55,53 @@ async function SetRangeData(data) {
 async function DecWhere(pars) {
 	for (var prop in pars) {
 		var campi;
-		var dati;
-		var dati1;
-
 		if(pars[prop]!==undefined && +pars[prop]!==0 && pars[prop]!==""){
 			if(campi===undefined){		
 				if(prop === 'start') {
-					dati = giraData1(pars[prop]);
 					prop = 'LABDT0';
 					campi = prop + ' >= ? ';
 				}
 				 else if(prop === 'end') {
-					dati = giraData1(pars[prop]);
 					prop = 'LABDT0';
 					campi = prop + ' <= ? ';
 				}
 				else {
-					dati = pars[prop];
-					campi = prop + '= ? ';
+					campi = prop + ' = ? ';
 				}
-				//campi = prop + '= ? '; 
-				//console.log("WHERE "+campi);
-				//console.log("DATI: " + dati);
 			}else{
-				
-				
 				if(prop === 'start') {
-					dati1 = giraData1(pars[prop]);
-					dati += ',' + dati1;
 					prop = 'LABDT0';
 					campi += 'AND ' + prop + ' >= ? '; 
 				}
 				else if(prop === 'end') {
-					dati1 = giraData1(pars[prop]);
-					dati += ',' + dati1;
 					prop = 'LABDT0';
 					campi += 'AND ' + prop + ' <= ? '; 
 				}
 				else {
-					dati += ',' + pars[prop];
-					campi += 'AND ' + prop + '= ? '; 
+					campi += 'AND ' + prop + ' = ? '; 
 				}
-				//campi += 'AND ' + prop + '= ? '; 
-				//console.log("WHERE "+campi);
-				//console.log("DATI: " + dati);
 			}
 		};
 	  }
-	  return [campi,dati];
+	  return campi;
+  }
+
+  async function DecWhere1(pars) {
+	var dati=[];
+	for (var prop in pars) {
+		if(pars[prop]!==undefined && +pars[prop]!==0 && pars[prop]!==""){
+				if(prop === 'start') {
+					dati.push(giraData1(pars[prop]));
+				}
+				 else if(prop === 'end') {
+					dati.push(giraData1(pars[prop]));
+				}
+				else {
+					dati.push(pars[prop]);
+				}
+		};
+	  }
+	  return dati;
   }
 
 function giraData (data) {
