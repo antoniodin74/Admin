@@ -323,24 +323,9 @@ module.exports = function (app) {
       });
       //MD25/01/2023
       app.get('/tables-datatable-as', isUserAllowed, async (req, res)=> {
-            /*if(req.query.start!==undefined){
-                  var dtini=(req.query.start);
-                  var aa = dtini.substring(6, 10);
-                  var mm = dtini.substring(3, 5);
-                  var gg = dtini.substring(0, 2);
-                  var dtini = aa+mm+gg;
-                  console.log(dtini);
-                  var dtfin=(req.query.end);
-                  var aa = dtfin.substring(6, 10);
-                  var mm = dtfin.substring(3, 5);
-                  var gg = dtfin.substring(0, 2);
-                  var dtfin = aa+mm+gg;
-                  console.log(dtfin);
-            };*/
-
             const result = await(as400.getAs(req.query));
             res.locals = { title: 'Datatables AS' };
-            res.render('Tables/tables-datatable-as', {'Dati': result ,'user':req.session.user.username});
+            res.render('Tables/tables-datatable-as', {'Dati': result ,'user':req.session.user.username,'Dati1': ''});
       });
       app.get('/tables-responsive', isUserAllowed, function (req, res) {
             res.locals = { title: 'Responsive' };

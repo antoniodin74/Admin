@@ -32,37 +32,21 @@ $(document).ready(function() {
     table.buttons().container()
         .appendTo('#datatable1-buttons_wrapper .col-md-6:eq(0)');
         
-        $(".dataTables_length select").addClass('form-select form-select-sm');
-   
-        
-        document.getElementById("scompare").style.display = "none";
-        $("#btReset").click(function() {
-        $("#frmSelezioni")[0].reset();
+    $(".dataTables_length select").addClass('form-select form-select-sm');
+
+    
+    document.getElementById("row-scompare").style.display = "none";
+
+    $("#btReset").click(function() {
+    $("#frmSelezioni")[0].reset();
     });
-        $("#btSave").click(function() {
-            var anno = $("#anno").val();
-            console.log(anno);
-            var nrreg = $("#nrreg").val();
-            console.log(nrreg);
-            var deroga = $("#deroga").val();
-            console.log(deroga);
-            var tpbol = $("#tpbol").val();
-            console.log(tpbol);
-            var nrbol = $("#nrbol").val();
-            console.log(nrbol);
-            var dtini = $("#dtini").val();
-            var aa = dtini.substring(6, 10);
-            var mm = dtini.substring(3, 5);
-            var gg = dtini.substring(0, 2);
-            var dtini = aa+mm+gg;
-            console.log(dtini);
-            var dtfin = $("#dtfin").val();
-            var aa = dtfin.substring(6, 10);
-            var mm = dtfin.substring(3, 5);
-            var gg = dtfin.substring(0, 2);
-            var dtfin = aa+mm+gg;
-            console.log(dtfin);
-            var stato = $("#stato").val();
-            console.log(stato);
-        });
+
+    $('#datatable-buttons tbody').on('click', 'tr', function() {
+        var LAARE0 = $(this).find('td:eq(0)').text();
+        var LANRE0 = $(this).find('td:eq(1)').text();
+        console.log(LAARE0);
+        const result = await(as400.getAs1(LAARE0,LANRE0));
+        document.getElementById("row-scompare").style.display = "flex";
+});
+
 } );

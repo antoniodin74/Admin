@@ -131,6 +131,11 @@ function giraData1 (data) {
 	var data = aa + '-' + mm + '-' + gg;
 	return data;
 }
+
+async function getAs1(anreg,nureg){	
+
+}
 module.exports =  {
-	getAs
+	getAs,
+	getAs1
 };
