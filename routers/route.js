@@ -321,12 +321,20 @@ module.exports = function (app) {
             res.locals = { title: 'Datatables' };
             res.render('Tables/tables-datatable', {'user':req.session.user.username});
       });
+      //AS400
       //MD25/01/2023
       app.get('/tables-datatable-as', isUserAllowed, async (req, res)=> {
             const result = await(as400.getAs(req.query));
             res.locals = { title: 'Datatables AS' };
             res.render('Tables/tables-datatable-as', {'Dati': result ,'user':req.session.user.username,'Dati1': ''});
       });
+      app.get('/tables-datatable-as1', isUserAllowed, async (req, res)=> {
+            //console.log(req.query);
+            const result = await(as400.getAs1(req.query.parametro1,req.query.parametro2));
+            //console.log(result);
+            res.json(result);
+      });
+      // END-AS400
       app.get('/tables-responsive', isUserAllowed, function (req, res) {
             res.locals = { title: 'Responsive' };
             res.render('Tables/tables-responsive', {'user':req.session.user.username});

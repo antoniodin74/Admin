@@ -132,9 +132,17 @@ function giraData1 (data) {
 	return data;
 }
 
-async function getAs1(anreg,nureg){	
-
+async function getAs1(param1,param2){	
+	param = [
+		param1,
+		param2
+	];
+	const cn1 = "DSN=nodejs;UID=dinoceraa;PWD=antodino";
+	const connection = await odbc.connect(cn1);
+	const data = await connection.query('SELECT LACTR0, LANRE0 FROM L0__STDAT.LABOLF0 WHERE LAARE0 = ? AND LANRE0 = ?' , param);
+	return data;
 }
+
 module.exports =  {
 	getAs,
 	getAs1

@@ -40,13 +40,4 @@ $(document).ready(function() {
     $("#btReset").click(function() {
     $("#frmSelezioni")[0].reset();
     });
-
-    $('#datatable-buttons tbody').on('click', 'tr', function() {
-        var LAARE0 = $(this).find('td:eq(0)').text();
-        var LANRE0 = $(this).find('td:eq(1)').text();
-        console.log(LAARE0);
-        const result = await(as400.getAs1(LAARE0,LANRE0));
-        document.getElementById("row-scompare").style.display = "flex";
-});
-
 } );

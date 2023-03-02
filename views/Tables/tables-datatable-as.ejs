@@ -12,8 +12,33 @@
 <link href="public/assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
 <link href="public/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
 <link href="public/assets/libs/@chenfengyuan/datepicker/datepicker.min.css" rel="stylesheet" >
-<%- contentFor('breadcrumb') %>
 
+<%- contentFor('breadcrumb') %>
+<script>
+function getDati(parametro1, parametro2) {    
+        axios.get('/tables-datatable-as1', {
+            params:{
+            parametro1: parametro1,
+            parametro2: parametro2
+            }
+        }
+        )
+        .then(function (response) {
+            let myArray = response.data;
+            for (let i = 0; i < myArray.length; i++) {
+                const tableRow = document.getElementById("datatable1-buttons").insertRow();
+                const myObject =myArray[i];
+                for (const key in myObject) {
+                    const cell = tableRow.insertCell();
+                    cell.innerHTML = myObject[key];
+                }
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+</script>
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
@@ -195,15 +220,16 @@
                     <thead>
                     <tr>
                         <th>Cntr</th>
+                        <th>Numero</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    <% for (let dato1 of Dati1) { %>
                         <tr>
-                        <td><%= dato1.LACTR0%></td>
-                    </tr>
-                    <%}%> 
+                            <td></td>
+                            <td></td>
+                        </tr>
+                   
                     </tbody>
                 </table>  
             </div>
@@ -244,5 +270,15 @@
 <!-- Datatable init js -->
 <script src="public/assets/js/pages/datatables.init.js"></script>
 <script src="public/assets/js/pages/form-advanced.init.js"></script>
-
+<script src="public/assets/js/app.js"></script>
+<script src="/axios/axios.min.js"></script>
+<script>
+    $('#datatable-buttons tbody').on('click', 'tr', function() {
+        var LAARE0 = $(this).find('td:eq(0)').text();
+        var LANRE0 = $(this).find('td:eq(1)').text();
+        console.log(LAARE0);
+        getDati(LAARE0,LANRE0);
+        document.getElementById("row-scompare").style.display = "flex";
+});
+</script>
 <%- contentFor('BottomJs') %>
