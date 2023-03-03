@@ -20,18 +20,21 @@ $(document).ready(function() {
         
         $(".dataTables_length select").addClass('form-select form-select-sm');
 
-        $('#datatable1').DataTable();
-
-    //Buttons examples
-    var table = $('#datatable1-buttons').DataTable({
+    $('#datatable1').DataTable();
+    
+     //Buttons examples
+     var table = $('#datatable1-buttons').DataTable({
         lengthChange: false,
         buttons: ['copy', 'excel', 'pdf', 'colvis']
     });
-
+    
     table.buttons().container()
         .appendTo('#datatable1-buttons_wrapper .col-md-6:eq(0)');
         
-        $(".dataTables1_length select").addClass('form-select form-select-sm');
+    $(".dataTables_length select").addClass('form-select form-select-sm');
+
+    
+    document.getElementById("row-scompare").style.display = "none";
 
     $("#btReset").click(function() {
     $("#frmSelezioni")[0].reset();
