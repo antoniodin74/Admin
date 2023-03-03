@@ -15,16 +15,17 @@
 
 <%- contentFor('breadcrumb') %>
 <script>
-function getDati(parametro1, parametro2) {    
-        axios.get('/tables-datatable-as1', {
+function getDati(anreg, nrreg) {    
+        axios.get('/tables-datatable-bolle-det', {
             params:{
-            parametro1: parametro1,
-            parametro2: parametro2
+            anno: anreg,
+            numero: nrreg
+                }
             }
-        }
         )
         .then(function (response) {
-            let myArray = response.data;
+            let myArray = response.data.Dati;
+            //console.log(dati);
             for (let i = 0; i < myArray.length; i++) {
                 const tableRow = document.getElementById("datatable1-buttons").insertRow();
                 const myObject =myArray[i];
@@ -37,6 +38,20 @@ function getDati(parametro1, parametro2) {
         .catch(function (error) {
             console.log(error);
         });
+        /*.then(function (response) {
+            let myArray = response.data;
+            for (let i = 0; i < myArray.length; i++) {
+                const tableRow = document.getElementById("datatable1-buttons").insertRow();
+                const myObject =myArray[i];
+                for (const key in myObject) {
+                    const cell = tableRow.insertCell();
+                    cell.innerHTML = myObject[key];
+                }
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });*/
     }
 </script>
 <!-- start page title -->
@@ -203,12 +218,8 @@ function getDati(parametro1, parametro2) {
     </div> <!-- end col -->
 
 </div> <!-- end row -->
-
-<div class="row" id="row-scompare">
-    
-    <div class="col-xl-3">
-        
-    </div><!-- end col -->
+<div class="row">
+    <div class="col-xl-3"></div>
     <div class="col-xl-9">
         <div class="card">
             <div class="card-body">
@@ -220,16 +231,17 @@ function getDati(parametro1, parametro2) {
                     <thead>
                     <tr>
                         <th>Cntr</th>
-                        <th>Numero</th>
+                        <th>Nr Reg</th>
                     </tr>
                     </thead>
 
                     <tbody>
+                    <% for (let dato of Dati) { %>
                         <tr>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                   
+                        <td><%= dato.LACRT0%></td>
+                        <td><%= dato.LANRE0%></td>
+                    </tr>
+                    <%}%> 
                     </tbody>
                 </table>  
             </div>
@@ -237,8 +249,6 @@ function getDati(parametro1, parametro2) {
     </div> <!-- end col -->
 
 </div> <!-- end row -->
-
-
 <%- contentFor('FooterJs') %>
 
 
@@ -274,11 +284,11 @@ function getDati(parametro1, parametro2) {
 <script src="/axios/axios.min.js"></script>
 <script>
     $('#datatable-buttons tbody').on('click', 'tr', function() {
-        var LAARE0 = $(this).find('td:eq(0)').text();
-        var LANRE0 = $(this).find('td:eq(1)').text();
-        console.log(LAARE0);
-        getDati(LAARE0,LANRE0);
-        document.getElementById("row-scompare").style.display = "flex";
+        var anno = $(this).find('td:eq(0)').text();
+        var numero = $(this).find('td:eq(1)').text();
+        console.log(anno);
+        console.log(numero);
+        getDati(anno,numero);
 });
 </script>
 <%- contentFor('BottomJs') %>

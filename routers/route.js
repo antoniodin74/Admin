@@ -326,13 +326,20 @@ module.exports = function (app) {
       app.get('/tables-datatable-as', isUserAllowed, async (req, res)=> {
             const result = await(as400.getAs(req.query));
             res.locals = { title: 'Datatables AS' };
-            res.render('Tables/tables-datatable-as', {'Dati': result ,'user':req.session.user.username,'Dati1': ''});
+            res.render('Tables/tables-datatable-as', {'Dati': result ,'user':req.session.user.username});
       });
-      app.get('/tables-datatable-as1', isUserAllowed, async (req, res)=> {
-            //console.log(req.query);
-            const result = await(as400.getAs1(req.query.parametro1,req.query.parametro2));
+      app.get('/tables-datatable-bolle-det', isUserAllowed, async (req, res)=> {
+            const result = await(as400.getBolleDet(req.query.anno,req.query.numero));
+            //res.locals = { title: 'Dettaglio Bolle Diganali' };
             //console.log(result);
-            res.json(result);
+            res.send({ 'Dati': result ,'user':req.session.user.username} );
+            //res.render('Tables/tables-datatable-bolle-det', {'Dati': result ,'user':req.session.user.username});
+      });
+      app.get('/tables-datatable-bolle-det1', isUserAllowed, async (req, res)=> {
+            console.log(req.query);
+
+            //res.locals = { title: 'Dettaglio Bolle Diganali' };
+           // res.render('Tables/tables-datatable-bolle-det', {'Dati': result ,'user':req.session.user.username});
       });
       // END-AS400
       app.get('/tables-responsive', isUserAllowed, function (req, res) {
