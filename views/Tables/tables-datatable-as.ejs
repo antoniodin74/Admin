@@ -240,12 +240,10 @@ function getDati(anreg, nrreg) {
                     </thead>
 
                     <tbody>
-                        <% for (let dato of Dati) { %>
                             <tr>
-                            <td><%= dato.LANRE0%></td>
-                            <td><%= dato.LACTR0%></td>
+                            <td></td>
+                            <td></td>
                         </tr>
-                        <%}%> 
                     </tbody>
                 </table>  
             </div>
@@ -293,6 +291,7 @@ function getDati(anreg, nrreg) {
         console.log(anno);
         console.log(numero);
         getDati(anno,numero);
+        document.getElementById("row-scompare").style.display = "flex";
 });
 </script>
 <%- contentFor('BottomJs') %>
