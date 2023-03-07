@@ -336,7 +336,7 @@ module.exports = function (app) {
             //res.render('Tables/tables-datatable-bolle-det', {'Dati': result ,'user':req.session.user.username});
       });
       app.get('/tables-datatable-bolle-det1', isUserAllowed, async (req, res)=> {
-            console.log(req.query);
+            //console.log(req.query);
 
             //res.locals = { title: 'Dettaglio Bolle Diganali' };
            // res.render('Tables/tables-datatable-bolle-det', {'Dati': result ,'user':req.session.user.username});

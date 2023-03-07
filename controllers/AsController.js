@@ -133,8 +133,8 @@ function giraData1 (data) {
 }
 
 async function getBolleDet(param1,param2){	
-	console.log(param1);
-	console.log(param2);
+	//console.log(param1);
+	//console.log(param2);
 	param = [
 		param1,
 		param2
