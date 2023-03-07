@@ -38,6 +38,10 @@ function getDati(anreg, nrreg) {
         )
     }
 </script>
+
+
+<%- contentFor('body') %>
+
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
@@ -53,14 +57,9 @@ function getDati(anreg, nrreg) {
 
         </div>
     </div>
-</div>
-<!-- end page title -->
-
-<%- contentFor('body') %>
-
+</div><!-- end page title -->
 <div class="row">
-
-    <div class="col-xl-3">
+    <div class="col-xl-12">
         <div class="custom-accordion">
             <div class="card">
                 <a href="#checkout-billinginfo-collapse" class="text-dark" data-bs-toggle="collapse">
@@ -130,6 +129,12 @@ function getDati(anreg, nrreg) {
                                 </div>
                                 <div class="row">
                                     <div class="mb-4">
+                                        <label class="form-label" for="LABTI0">Tipologia bolla</label>
+                                        <input type="text" class="form-control" id="LABTI0" name="LABTI0" placeholder="Enter tipologia bolla"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-4">
                                             <label class="form-label" for="LASTR0">Stato</label>
                                             <select class="form-control form-select" id="LASTR0" name="LASTR0" title="Stato">
                                                 <option value="0">Stato</option>
@@ -155,8 +160,9 @@ function getDati(anreg, nrreg) {
             </div>
         </div>
     </div><!-- end col -->
-
-    <div class="col-xl-9">
+</div>
+<div class="row"> 
+    <div class="col-xl-12">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title"></h4>    
@@ -172,6 +178,7 @@ function getDati(anreg, nrreg) {
                         <th>Tipo Bolla</th>
                         <th>Nr.Bolla</th>
                         <th>Dt.Bolla</th>
+                        <th>Tipologia</th>
                         <th>Stato</th>
                         <th>Tot.Cntr</th>
                     </tr>
@@ -191,6 +198,7 @@ function getDati(anreg, nrreg) {
                         <td><%= dato.LATBO0%></td>
                         <td><%= dato.LABNR0%></td>
                         <td><%= dtok %>      </td>
+                        <td><%= dato.LABTI0%></td>
                         <td><%= dato.LASTR0%></td>
                         <td><%= dato.TCNT%></td>
                     </tr>
@@ -202,13 +210,8 @@ function getDati(anreg, nrreg) {
     </div> <!-- end col -->
 
 </div> <!-- end row -->
-
 <div class="row" id="row-scompare">
-    
-    <div class="col-xl-3">
-        
-    </div><!-- end col -->
-    <div class="col-xl-9">
+    <div class="col-xl-12">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title"></h4>    

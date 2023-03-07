@@ -12,7 +12,7 @@ $(document).ready(function() {
     //Buttons examples
     var table = $('#datatable-buttons').DataTable({
         lengthChange: false,
-        buttons: ['copy', 'excel', 'pdf', 'colvis']
+        buttons: ['copy', 'excel', 'pdf', 'colvis', 'print', 'csv']
     });
 
     table.buttons().container()
@@ -25,7 +25,7 @@ $(document).ready(function() {
      //Buttons examples
      var table = $('#datatable1-buttons').DataTable({
         lengthChange: false,
-        buttons: ['copy', 'excel', 'pdf', 'colvis']
+        buttons: ['copy', 'excel', 'pdf', 'colvis', 'print', 'csv']
     });
     
     table.buttons().container()

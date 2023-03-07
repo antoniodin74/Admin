@@ -330,10 +330,7 @@ module.exports = function (app) {
       });
       app.get('/tables-datatable-bolle-det', isUserAllowed, async (req, res)=> {
             const result = await(as400.getBolleDet(req.query.anno,req.query.numero));
-            //res.locals = { title: 'Dettaglio Bolle Diganali' };
-            //console.log(result);
             res.send({ 'Dati': result ,'user':req.session.user.username} );
-            //res.render('Tables/tables-datatable-bolle-det', {'Dati': result ,'user':req.session.user.username});
       });
       app.get('/tables-datatable-bolle-det1', isUserAllowed, async (req, res)=> {
             //console.log(req.query);
