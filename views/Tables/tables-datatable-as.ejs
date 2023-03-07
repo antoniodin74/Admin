@@ -38,20 +38,6 @@ function getDati(anreg, nrreg) {
         .catch(function (error) {
             console.log(error);
         });
-        /*.then(function (response) {
-            let myArray = response.data;
-            for (let i = 0; i < myArray.length; i++) {
-                const tableRow = document.getElementById("datatable1-buttons").insertRow();
-                const myObject =myArray[i];
-                for (const key in myObject) {
-                    const cell = tableRow.insertCell();
-                    cell.innerHTML = myObject[key];
-                }
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        });*/
     }
 </script>
 <!-- start page title -->
@@ -288,8 +274,8 @@ function getDati(anreg, nrreg) {
     $('#datatable-buttons tbody').on('click', 'tr', function() {
         var anno = $(this).find('td:eq(0)').text();
         var numero = $(this).find('td:eq(1)').text();
-        console.log(anno);
-        console.log(numero);
+        //console.log(anno);
+        //console.log(numero);
         getDati(anno,numero);
         document.getElementById("row-scompare").style.display = "flex";
 });
