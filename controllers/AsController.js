@@ -137,11 +137,14 @@ async function getBolleDet(param1,param2){
 	//console.log(param2);
 	param = [
 		param1,
-		param2
+		param2,
+		'ARM',
+		'NAV'
 	];
 	const cn1 = "DSN=nodejs;UID=dinoceraa;PWD=antodino";
 	const connection = await odbc.connect(cn1);
-	const data = await connection.query('SELECT LACTR0, LANRE0 FROM L0__STDAT.LABOLF0 WHERE LAARE0 = ? AND LANRE0 = ?' , param);
+	const data = await connection.query("SELECT LACTR0, LAIDV0, LAMRN0, LACAR0, LACNA0, LACIM0, a.TABDTA, b.TABDTA  FROM L0__STDAT.LABOLF0 JOIN TABEGEN as a ON CONCAT('0',CAST(LACAR0 AS varchar(10)))= a.kfld2 JOIN TABEGEN01L as b ON CAST(LACNA0 AS varchar(10))= b.kfld2  WHERE LAARE0 = ? AND LANRE0 = ? AND a.KFLD1 = ? AND b.KFLD1 = ?" , param);
+	console.log(data);
 	return data;
 }
 

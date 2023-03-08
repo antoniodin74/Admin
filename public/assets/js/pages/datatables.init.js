@@ -35,7 +35,6 @@ $(document).ready(function() {
 
     
     document.getElementById("row-scompare").style.display = "none";
-
     $("#btReset").click(function() {
     $("#frmSelezioni")[0].reset();
     });
